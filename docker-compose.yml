@@ -1,0 +1,20 @@
+lb:
+  image: "progrium/consul:latest"
+  hostname: "lb"
+  ports:
+    - "8400:8400"
+    - "8500:8500"
+    - "8600:53/udp"
+  command: "-server -bootstrap -ui-dir /ui"
+web:
+  image: "progrium/consul:latest"
+  hostname: "web"
+  command: "-retry-join lb"
+  links:
+    - lb
+db:
+  image: "progrium/consul:latest"
+  hostname: "db"
+  command: "-retry-join lb"
+  links:
+    - lb
