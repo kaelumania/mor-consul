@@ -1,0 +1,7 @@
+#!/bin/bash
+NAME=consul-ui docker-compose run -d --name consul-ui consul-main
+
+join_ip="$(docker inspect -f '{{.NetworkSettings.IPAddress}}' consul-ui)"
+
+NAME=lb-1 docker-compose run -d consul -server -retry-join $join_ip
+NAME=lb-2 docker-compose run consul -server -retry-join $join_ip
